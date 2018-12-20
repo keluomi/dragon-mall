@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.lishi.moduledb.dao.ProductDao">
+    <!-- 映射配置 -->
+    <resultMap id="ProductResultMap" type="com.lishi.moduledb.domain.Product" >
+        <result column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="price" property="price"/>
+    </resultMap>
+
+    <!-- 条件配置 -->
+    <sql id="ProductQueryFilter">
+        <where>
+            <if test="id != null"> AND T.id = #{id} </if>
+            <if test="code != null"> AND T.code = #{code} </if>
+            <if test="name != null"> AND T.name = #{name} </if>
+            <if test="price != null"> AND T.price = #{price} </if>
+        </where>
+    </sql>
+
+
+
+
+    <!-- 删除条件配置 -->
+    <sql id="ProductDeleteFilter">
+        <where>
+            <if test="id != null"> AND id = #{id} </if>
+
+            <if test="code != null"> AND code = #{code} </if>
+
+            <if test="name != null"> AND name = #{name} </if>
+
+            <if test="price != null"> AND price = #{price} </if>
+
+        </where>
+    </sql>
+
+    <!-- 更新配置 -->
+    <sql id="ProductSetFilter">
+        <set>
+            <if test="id != null"> T.id = #{id}, </if>
+
+            <if test="code != null"> T.code = #{code}, </if>
+
+            <if test="name != null"> T.name = #{name}, </if>
+
+            <if test="price != null"> T.price = #{price}, </if>
+
+
+
+        </set>
+    </sql>
+
+
+    <!-- =======业务SQL====== -->
+    <!-- 保存银行卡照片 -->
+    <insert id="save" parameterType="com.lishi.moduledb.domain.Product">
+        INSERT INTO tb_product (
+        id,
+        code,
+        name,
+        price
+        ) VALUES (
+        #{id},
+        #{code},
+        #{name},
+        #{price}
+        )
+    </insert>
+
+
+
+
+    <!-- 删除银行卡照片 -->
+    <delete id="delete" parameterType="com.lishi.moduledb.domain.Product">
+        DELETE FROM tb_product
+        <include refid="ProductDeleteFilter"/>
+    </delete>
+
+    <!-- 修改银行卡照片 -->
+    <update id="update" parameterType="com.lishi.moduledb.domain.Product">
+        UPDATE tb_product T
+        <include refid="ProductSetFilter"/>
+        WHERE T.ID=#{id}
+    </update>
+
+
+
+    <!-- 根据条件查询第一条银行卡照片 -->
+    <select id="findTopOne" parameterType="com.lishi.moduledb.domain.Product" resultMap="ProductResultMap">
+        SELECT T.* FROM tb_product T
+        <include refid="ProductQueryFilter"/>  limit 1
+    </select>
+
+    <!-- 根据条件查询保存银行卡照片列表 -->
+    <select id="findList" parameterType="com.lishi.moduledb.domain.Product" resultMap="ProductResultMap">
+        SELECT T.* FROM tb_product T
+        <include refid="ProductQueryFilter"/>
+    </select>
+
+    <!-- 查询所有 -->
+    <select id="findAll"  resultMap="ProductResultMap">
+        SELECT T.* FROM tb_product T
+    </select>
+
+
+</mapper>
